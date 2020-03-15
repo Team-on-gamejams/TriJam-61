@@ -84,7 +84,7 @@ public static class BuildManager {
 		buildsPath.Add(BuildLinux(true));
 		buildsPath.Add(BuildOSX(true));
 		buildsPath.Add(BuildWeb(true));
-		buildsPath.Add(BuildAndroid(true));
+		//buildsPath.Add(BuildAndroid(true));
 		EditorUserBuildSettings.SwitchActiveBuildTarget(targetGroupBeforeStart, targetBeforeStart);
 		Debug.Log($"End building all. Elapsed time: {string.Format("{0:mm\\:ss}", DateTime.Now - startTime)}");
 	}
