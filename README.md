@@ -3,7 +3,7 @@
 Theme: Negative Space  
 Double sided - 2d retro platformer in 2 worlds  
 
-![Cover](Screenshots/Cover1.jpg)
+![Cover](Screenshots/Cover.png)
 
 # Downloads and Links
 Available in [Windows, OSX, Linux and Web](https://teamon.itch.io/double-sided). If you encounter any problem, please leave a issue! 
