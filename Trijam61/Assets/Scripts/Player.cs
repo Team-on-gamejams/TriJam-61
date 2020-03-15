@@ -8,6 +8,8 @@ using UnityEngine;
 public class Player : MonoBehaviour {
 	[SerializeField] float moveSpeed = 5.0f;
 	[SerializeField] float jumpForce = 20.0f;
+	[SerializeField] LayerMask groundMask;
+	[SerializeField] Transform groundCheck;
 
 	[SerializeField] GameObject[] worlds;
 	byte currWorld = 0;
@@ -27,11 +29,11 @@ public class Player : MonoBehaviour {
 			anim = GetComponent<Animator>();
 	}
 
-	private void OnCollisionEnter2D(Collision2D collision) {
-		if (collision.transform.tag == "Floor") {
-			isGrounded = true;
-		}
-	}
+	//private void OnCollisionEnter2D(Collision2D collision) {
+	//	if (collision.transform.tag == "Floor") {
+	//		isGrounded = true;
+	//	}
+	//}
 
 	void Update() {
 		moveInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
@@ -45,6 +47,14 @@ public class Player : MonoBehaviour {
 	}
 
 	void FixedUpdate() {
+		isGrounded = false;
+		Collider2D[] colliders = Physics2D.OverlapCircleAll(groundCheck.position, 0.2f, groundMask);
+		for (int i = 0; i < colliders.Length; i++) {
+			if (colliders[i].gameObject != gameObject) {
+				isGrounded = true;
+			}
+		}
+
 		Move(moveInput);
 	}
 
