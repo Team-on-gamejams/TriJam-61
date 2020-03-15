@@ -9,6 +9,9 @@ public class Player : MonoBehaviour {
 	[SerializeField] float moveSpeed = 5.0f;
 	[SerializeField] float jumpForce = 20.0f;
 
+	[SerializeField] GameObject[] worlds;
+	byte currWorld = 0;
+
 	[HideInInspector] [SerializeField] Rigidbody2D rb;
 	[HideInInspector] [SerializeField] Animator anim;
 
@@ -32,6 +35,13 @@ public class Player : MonoBehaviour {
 
 	void Update() {
 		moveInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+
+		if(Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.K)) {
+			worlds[currWorld].SetActive(false);
+			if (++currWorld >= worlds.Length)
+				currWorld = 0;
+			worlds[currWorld].SetActive(true);
+		}
 	}
 
 	void FixedUpdate() {

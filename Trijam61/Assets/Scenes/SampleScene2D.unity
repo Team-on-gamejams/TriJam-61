@@ -2286,6 +2286,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 5
   jumpForce: 10
+  worlds:
+  - {fileID: 1562676320}
+  - {fileID: 1772306932}
   rb: {fileID: 1277743519}
   anim: {fileID: 1277743520}
 --- !u!61 &1277743518
@@ -3163,7 +3166,7 @@ GameObject:
   - component: {fileID: 1562676322}
   - component: {fileID: 1562676321}
   m_Layer: 0
-  m_Name: Grid
+  m_Name: NormalWorld
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3895,7 +3898,7 @@ GameObject:
   - component: {fileID: 1772306934}
   - component: {fileID: 1772306933}
   m_Layer: 0
-  m_Name: Grid2
+  m_Name: NegativeWorld
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
