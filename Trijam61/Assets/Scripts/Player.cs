@@ -18,10 +18,14 @@ public class Player : MonoBehaviour {
 	byte currWorld = 0;
 
 	[Header("Die")]
+	 public Transform respawnPoint;
 	[SerializeField] Transform aroundCanvas;
-	[SerializeField] Transform respawnPoint;
 	[SerializeField] DieData[] dieDatas;
 	byte currDieDialog = 0;
+
+	[Header("Win")]
+	[SerializeField] TextMeshProUGUI winText;
+	[SerializeField] float winTextTime;
 
 	[HideInInspector] [SerializeField] Rigidbody2D rb;
 	[HideInInspector] [SerializeField] Animator anim;
@@ -80,7 +84,6 @@ public class Player : MonoBehaviour {
 
 		DieData dieData = dieDatas[currDieDialog];
 
-
 		float allTime = 0.0f;
 		for(byte i = 0; i < dieData.time.Length; ++i) {
 			int curr = i;
@@ -106,7 +109,18 @@ public class Player : MonoBehaviour {
 				dieData.texts[0].text += "?";
 			}
 		});
+	}
 
+	public void Win() {
+		isCanControl = false;
+		rb.gravityScale = 0.0f;
+		rb.velocity = Vector3.zero;
+
+		winText.gameObject.SetActive(true);
+		LeanTween.delayedCall(winTextTime, () => {
+			winText.gameObject.SetActive(false);
+			rb.gravityScale = 1.0f;
+		});
 	}
 
 	private void Move(Vector2 direction) {
