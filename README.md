@@ -1,5 +1,7 @@
 # TriJam-61
-[TriJam #61: The 3 hour game jam](https://itch.io/jam/trijam-61). Theme: Negative Space. Game: Double sided - 2d retro platformer in 2 worlds
+[TriJam #61: The 3 hour game jam](https://itch.io/jam/trijam-61)  
+Theme: Negative Space  
+Double sided - 2d retro platformer in 2 worlds  
 
 ![Cover](Screenshots/Cover1.jpg)
 
