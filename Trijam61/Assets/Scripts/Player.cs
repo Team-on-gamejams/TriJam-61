@@ -14,8 +14,8 @@ public class Player : MonoBehaviour {
 	[SerializeField] Transform groundCheck;
 
 	[Header("Worlds")]
-	[SerializeField] GameObject[] worlds;
-	byte currWorld = 0;
+	public GameObject[] worlds;
+	public byte currWorld = 0;
 
 	[Header("Die")]
 	 public Transform respawnPoint;
