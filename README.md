@@ -18,6 +18,9 @@ Available in [Windows, OSX, Linux and Web](https://teamon.itch.io/double-sided).
 # What is TriJam?
 TriJam is a jam where your goal is to try and make something playable (and fun) in only 3 hours! How is that even possible, you ask? Well, just look at the history of previous TriJams and we're sure you'll be convinced that it is not only possible, but very manageable!
 
+# Used assets:
+ * [retro-lines](https://v3x3d.itch.io/retro-lines) - all art
+
 # Screenshots
 ![Screen1](Screenshots/1.jpg)
 ![Screen1](Screenshots/2.jpg)
