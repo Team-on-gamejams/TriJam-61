@@ -23,5 +23,5 @@ TriJam is a jam where your goal is to try and make something playable (and fun) 
  * [Grove Adventure](https://itch.io/jam/asset-jam-6/rate/580756) - music
 
 # Screenshots
-![Screen1](Screenshots/1.jpg)
-![Screen1](Screenshots/2.jpg)
+![Screen1](Screenshots/Screenshot1.jpg)
+![Screen1](Screenshots/Screenshot2.jpg)
