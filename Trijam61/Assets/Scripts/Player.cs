@@ -75,6 +75,9 @@ public class Player : MonoBehaviour {
 		isCanControl = false;
 		rb.gravityScale = 0.0f;
 		rb.velocity = Vector3.zero;
+		worlds[currWorld].SetActive(false);
+		worlds[currWorld = 0].SetActive(true);
+
 		DieData dieData = dieDatas[currDieDialog];
 
 
