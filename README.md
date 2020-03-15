@@ -25,4 +25,3 @@ TriJam is a jam where your goal is to try and make something playable (and fun) 
 # Screenshots
 ![Screen1](Screenshots/1.jpg)
 ![Screen1](Screenshots/2.jpg)
-![Screen1](Screenshots/3.jpg)
