@@ -14,11 +14,10 @@ public class Player : MonoBehaviour {
 	[SerializeField] Transform groundCheck;
 
 	[Header("Worlds")]
-	public GameObject[] worlds;
+	[SerializeField] Level level;
 	public byte currWorld = 0;
 
 	[Header("Die")]
-	 public Transform respawnPoint;
 	[SerializeField] Transform aroundCanvas;
 	[SerializeField] DieData[] dieDatas;
 	byte currDieDialog = 0;
@@ -50,10 +49,10 @@ public class Player : MonoBehaviour {
 			return;
 
 		if(Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.K)) {
-			worlds[currWorld].SetActive(false);
-			if (++currWorld >= worlds.Length)
+			level.worlds[currWorld].parent.SetActive(false);
+			if (++currWorld >= level.worlds.Length)
 				currWorld = 0;
-			worlds[currWorld].SetActive(true);
+			level.worlds[currWorld].parent.SetActive(true);
 		}
 
 		if (Input.GetKeyDown(KeyCode.R)) {
@@ -74,13 +73,32 @@ public class Player : MonoBehaviour {
 		Move(moveInput);
 	}
 
-	public void Die() {
-		transform.position = respawnPoint.position;
+	public void OnNewLevel(Level l) {
+		level = l;
+
+		transform.position = l.respawnPos.position;
+		currWorld = 0;
+	}
+
+	public void Win() {
 		isCanControl = false;
 		rb.gravityScale = 0.0f;
 		rb.velocity = Vector3.zero;
-		worlds[currWorld].SetActive(false);
-		worlds[currWorld = 0].SetActive(true);
+
+		winText.gameObject.SetActive(true);
+		LeanTween.delayedCall(winTextTime, () => {
+			winText.gameObject.SetActive(false);
+			rb.gravityScale = 1.0f;
+		});
+	}
+
+	public void Die() {
+		transform.position = level.respawnPos.position;
+		isCanControl = false;
+		rb.gravityScale = 0.0f;
+		rb.velocity = Vector3.zero;
+		level.worlds[currWorld].parent.SetActive(false);
+		level.worlds[currWorld = 0].parent.SetActive(true);
 
 		DieData dieData = dieDatas[currDieDialog];
 
@@ -108,18 +126,6 @@ public class Player : MonoBehaviour {
 			else {
 				dieData.texts[0].text += "?";
 			}
-		});
-	}
-
-	public void Win() {
-		isCanControl = false;
-		rb.gravityScale = 0.0f;
-		rb.velocity = Vector3.zero;
-
-		winText.gameObject.SetActive(true);
-		LeanTween.delayedCall(winTextTime, () => {
-			winText.gameObject.SetActive(false);
-			rb.gravityScale = 1.0f;
 		});
 	}
 
