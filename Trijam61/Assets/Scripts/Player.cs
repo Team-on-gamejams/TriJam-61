@@ -14,6 +14,7 @@ public class Player : MonoBehaviour {
 	[SerializeField] Transform groundCheck;
 
 	[Header("Worlds")]
+	[SerializeField] GeneralCameraShake cameraShake = null;
 	[SerializeField] float changeTime = 1.0f;
 	[SerializeField] Vector2 timescale = new Vector2(0.5f, 1.0f);
 	[SerializeField] Level level;
@@ -53,6 +54,7 @@ public class Player : MonoBehaviour {
 			return;
 
 		if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.K)) {
+			cameraShake.ShakeCamera(Vector3.right, currWorld == 0 ? false : true);
 			if (changeWorldRoutine != null)
 				StopCoroutine(changeWorldRoutine);
 			changeWorldRoutine = StartCoroutine(ChangeWorldCoroutine());

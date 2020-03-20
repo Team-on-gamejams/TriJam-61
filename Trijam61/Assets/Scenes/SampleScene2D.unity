@@ -3532,7 +3532,6 @@ MonoBehaviour:
     groups: []
     colliders:
     - {fileID: 656934809}
-    - {fileID: 656934807}
     - {fileID: 773362958}
     sprites:
     - {fileID: 773362959}
@@ -3545,7 +3544,6 @@ MonoBehaviour:
     groups: []
     colliders:
     - {fileID: 293512837}
-    - {fileID: 293512835}
     sprites: []
 --- !u!1 &515048675
 GameObject:
@@ -7638,7 +7636,6 @@ MonoBehaviour:
     groups: []
     colliders:
     - {fileID: 684844664}
-    - {fileID: 684844662}
     sprites: []
   - parent: {fileID: 1951096241}
     grids:
@@ -7648,7 +7645,6 @@ MonoBehaviour:
     groups: []
     colliders:
     - {fileID: 1390653846}
-    - {fileID: 1390653844}
     sprites: []
 --- !u!1 &975654986
 GameObject:
@@ -10235,9 +10231,7 @@ MonoBehaviour:
     - {fileID: 1475780179}
     colliders:
     - {fileID: 434260004}
-    - {fileID: 434260002}
     - {fileID: 1712038738}
-    - {fileID: 1712038736}
     sprites: []
   - parent: {fileID: 1772306932}
     grids:
@@ -10250,9 +10244,7 @@ MonoBehaviour:
     - {fileID: 938222914}
     colliders:
     - {fileID: 1278028786}
-    - {fileID: 1278028784}
     - {fileID: 1169537338}
-    - {fileID: 1169537336}
     - {fileID: 1022198377}
     sprites:
     - {fileID: 1022198378}
@@ -10315,7 +10307,6 @@ MonoBehaviour:
     - {fileID: 473662804}
     colliders:
     - {fileID: 515048679}
-    - {fileID: 515048677}
     sprites: []
   - parent: {fileID: 704849774}
     grids:
@@ -10326,7 +10317,6 @@ MonoBehaviour:
     - {fileID: 734094350}
     colliders:
     - {fileID: 1791741777}
-    - {fileID: 1791741775}
     sprites: []
 --- !u!1001 &1379141794
 PrefabInstance:
@@ -14796,6 +14786,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1996774141}
   - component: {fileID: 1996774140}
+  - component: {fileID: 1996774142}
   m_Layer: 0
   m_Name: CM vcam1
   m_TagString: Untagged
@@ -14853,6 +14844,22 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1996774142
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1996774139}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a650682fa3d54a57a2521dbf9f6eac2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  force1: 8
+  force2: 9
+  time: 0.2
+  shakePeriodTime: 0.6
 --- !u!1 &2002845180
 GameObject:
   m_ObjectHideFlags: 0
@@ -15078,6 +15085,11 @@ PrefabInstance:
       propertyPath: level
       value: 
       objectReference: {fileID: 1316668983}
+    - target: {fileID: 6213688061617813625, guid: a6bb5c6925fb0f44fab58aa72af1435c,
+        type: 3}
+      propertyPath: cameraShake
+      value: 
+      objectReference: {fileID: 1996774142}
     - target: {fileID: 6213688061617813630, guid: a6bb5c6925fb0f44fab58aa72af1435c,
         type: 3}
       propertyPath: m_Name
