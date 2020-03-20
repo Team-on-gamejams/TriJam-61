@@ -56,7 +56,7 @@ public class Player : MonoBehaviour {
 			worlds[currWorld].SetActive(true);
 		}
 
-		if (Input.GetKeyDown(KeyCode.R) || Input.GetKeyDown(KeyCode.K)) {
+		if (Input.GetKeyDown(KeyCode.R)) {
 			Die();
 		}
 	}
