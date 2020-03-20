@@ -1,6 +1,9 @@
-# TriJam-61
+# Double sided
 [TriJam #61: The 3 hour game jam](https://itch.io/jam/trijam-61)  
-Theme: Negative Space  
+Theme: Negative Space 
+[Duality Jam](https://itch.io/jam/duality-jam)  
+Theme: MIRROR WORLDS  
+
 Double sided - 2d retro platformer in 2 worlds  
 
 ![Cover](Screenshots/Cover.png)
