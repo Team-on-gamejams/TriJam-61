@@ -14,6 +14,8 @@ public class Player : MonoBehaviour {
 	[SerializeField] Transform groundCheck;
 
 	[Header("Worlds")]
+	[SerializeField] float changeTime = 1.0f;
+	[SerializeField] Vector2 timescale = new Vector2(0.5f, 1.0f);
 	[SerializeField] Level level;
 	public byte currWorld = 0;
 
@@ -35,8 +37,10 @@ public class Player : MonoBehaviour {
 	bool isFacingRight = true;
 	bool isCanControl = true;
 
+	Coroutine changeWorldRoutine;
+
 	void OnValidate() {
-		if(rb == null)
+		if (rb == null)
 			rb = GetComponent<Rigidbody2D>();
 		if (anim == null)
 			anim = GetComponent<Animator>();
@@ -45,14 +49,13 @@ public class Player : MonoBehaviour {
 	void Update() {
 		moveInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
 
-		if (!isCanControl) 
+		if (!isCanControl)
 			return;
 
-		if(Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.K)) {
-			level.worlds[currWorld].parent.SetActive(false);
-			if (++currWorld >= level.worlds.Length)
-				currWorld = 0;
-			level.worlds[currWorld].parent.SetActive(true);
+		if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.K)) {
+			if (changeWorldRoutine != null)
+				StopCoroutine(changeWorldRoutine);
+			changeWorldRoutine = StartCoroutine(ChangeWorldCoroutine());
 		}
 
 		if (Input.GetKeyDown(KeyCode.R)) {
@@ -75,8 +78,7 @@ public class Player : MonoBehaviour {
 
 	public void OnNewLevel(Level l) {
 		level = l;
-
-		transform.position = l.respawnPos.position;
+		transform.position = level.respawnPos.position;
 		currWorld = 0;
 	}
 
@@ -97,18 +99,20 @@ public class Player : MonoBehaviour {
 		isCanControl = false;
 		rb.gravityScale = 0.0f;
 		rb.velocity = Vector3.zero;
-		level.worlds[currWorld].parent.SetActive(false);
-		level.worlds[currWorld = 0].parent.SetActive(true);
+		level.Awake();
+		if(changeWorldRoutine != null)
+			StopCoroutine(changeWorldRoutine);
+		Time.timeScale = timescale.y;
 
 		DieData dieData = dieDatas[currDieDialog];
 
 		float allTime = 0.0f;
-		for(byte i = 0; i < dieData.time.Length; ++i) {
+		for (byte i = 0; i < dieData.time.Length; ++i) {
 			int curr = i;
 			LeanTween.delayedCall(allTime, () => {
 				LeanTween.cancel(dieData.dialog.gameObject);
 				dieData.texts[curr].gameObject.SetActive(true);
-				if(curr != 0)
+				if (curr != 0)
 					dieData.texts[curr - 1].gameObject.SetActive(false);
 				dieData.dialog.localPosition = Vector3.zero;
 				LeanTween.moveLocalY(dieData.dialog.gameObject, dieData.time[curr] * dieData.speed[curr], dieData.time[curr]);
@@ -120,7 +124,7 @@ public class Player : MonoBehaviour {
 		LeanTween.delayedCall(allTime, () => {
 			dieData.texts[dieData.time.Length - 1].gameObject.SetActive(false);
 			rb.gravityScale = 1.0f;
-			if(currDieDialog != dieDatas.Length - 1) {
+			if (currDieDialog != dieDatas.Length - 1) {
 				++currDieDialog;
 			}
 			else {
@@ -169,6 +173,77 @@ public class Player : MonoBehaviour {
 		theScale = aroundCanvas.localScale;
 		theScale.x *= -1;
 		aroundCanvas.localScale = theScale;
+	}
+
+	IEnumerator ChangeWorldCoroutine() {
+		Level.World curr = level.worlds[currWorld];
+		if (++currWorld >= level.worlds.Length)
+			currWorld = 0;
+		Level.World next = level.worlds[currWorld];
+
+		float t = 0;
+		float timeq1 = changeTime / 4;
+		float timehalf = changeTime / 2;
+		float timeq3 = changeTime / 4 * 3;
+
+		if (next.grids[0].color.a >= 0.75f)
+			t = timeq3;
+		else if (next.grids[0].color.a >= 0.5f)
+			t = timehalf;
+		else if (next.grids[0].color.a >= 0.25f)
+			t = timeq1;
+
+		Color startColorCurr = curr.grids[0].color;
+		Color startColorNext = next.grids[0].color;
+
+		float realTime = 0;
+		float realChangeTime = changeTime - t;
+
+		while ((t += Time.deltaTime) <= changeTime) {
+			realTime += Time.deltaTime;
+			foreach (var g in curr.grids) 
+				g.color = Color.Lerp(startColorCurr, Color.clear, realTime / realChangeTime);
+			foreach (var g in curr.groups)
+				g.alpha = curr.grids[0].color.a;
+			foreach (var s in curr.sprites)
+				s.color = curr.grids[0].color;
+
+			foreach (var g in next.grids)
+				g.color = Color.Lerp(startColorNext, Color.white, realTime / realChangeTime);
+			foreach (var g in next.groups)
+				g.alpha = next.grids[0].color.a;
+			foreach (var s in next.sprites)
+				s.color = next.grids[0].color;
+
+			if (t > timeq1 && !next.colliders[0].enabled) {
+				foreach (var c in next.colliders)
+					c.enabled = true;
+			}
+			else if (t > timeq3 && curr.colliders[0].enabled) {
+				foreach (var c in curr.colliders)
+					c.enabled = false;
+			}
+
+			if(t <= timehalf)
+				Time.timeScale = Mathf.Lerp(timescale.y, timescale.x, Mathf.Clamp01(t / timehalf));
+			else
+				Time.timeScale = Mathf.Lerp(timescale.x, timescale.y, Mathf.Clamp01((t - timehalf) / timehalf));
+
+			yield return null;
+		}
+
+		foreach (var g in curr.grids)
+			g.color = Color.clear;
+		foreach (var g in next.grids)
+			g.color = Color.white;
+		foreach (var g in curr.sprites)
+			g.color = Color.clear;
+		foreach (var g in next.sprites)
+			g.color = Color.white;
+		Time.timeScale = timescale.y;
+
+		yield return null;
+		changeWorldRoutine = null;
 	}
 }
 

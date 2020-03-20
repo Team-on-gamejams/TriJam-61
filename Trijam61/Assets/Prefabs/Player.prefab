@@ -1125,10 +1125,10 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1
   groundCheck: {fileID: 6213688060486095154}
-  worlds:
-  - {fileID: 0}
-  - {fileID: 0}
-  respawnPoint: {fileID: 0}
+  changeTime: 1
+  timescale: {x: 0.7, y: 1}
+  level: {fileID: 0}
+  currWorld: 0
   aroundCanvas: {fileID: 6213688061547038209}
   dieDatas:
   - dialog: {fileID: 6213688060151968834}
