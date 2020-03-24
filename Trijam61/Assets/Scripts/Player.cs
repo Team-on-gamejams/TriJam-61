@@ -92,7 +92,7 @@ public class Player : MonoBehaviour {
 		winText.gameObject.SetActive(true);
 		LeanTween.delayedCall(winTextTime, () => {
 			winText.gameObject.SetActive(false);
-			rb.gravityScale = 1.0f;
+			rb.gravityScale = 2.0f;
 		});
 	}
 
@@ -125,7 +125,7 @@ public class Player : MonoBehaviour {
 
 		LeanTween.delayedCall(allTime, () => {
 			dieData.texts[dieData.time.Length - 1].gameObject.SetActive(false);
-			rb.gravityScale = 1.0f;
+			rb.gravityScale = 2.0f;
 			if (currDieDialog != dieDatas.Length - 1) {
 				++currDieDialog;
 			}

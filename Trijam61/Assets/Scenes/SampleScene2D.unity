@@ -15106,19 +15106,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6213688061617813625, guid: a6bb5c6925fb0f44fab58aa72af1435c,
         type: 3}
-      propertyPath: level
-      value: 
-      objectReference: {fileID: 1316668983}
-    - target: {fileID: 6213688061617813625, guid: a6bb5c6925fb0f44fab58aa72af1435c,
-        type: 3}
       propertyPath: cameraShake
       value: 
       objectReference: {fileID: 1996774142}
     - target: {fileID: 6213688061617813625, guid: a6bb5c6925fb0f44fab58aa72af1435c,
         type: 3}
-      propertyPath: changeTime
-      value: 0.5
-      objectReference: {fileID: 0}
+      propertyPath: level
+      value: 
+      objectReference: {fileID: 1316668983}
     - target: {fileID: 6213688061617813630, guid: a6bb5c6925fb0f44fab58aa72af1435c,
         type: 3}
       propertyPath: m_Name

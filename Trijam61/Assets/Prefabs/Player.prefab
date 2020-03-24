@@ -1120,12 +1120,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 5
-  jumpForce: 4.25
+  jumpForce: 350
   groundMask:
     serializedVersion: 2
     m_Bits: 1
   groundCheck: {fileID: 6213688060486095154}
-  changeTime: 1
+  cameraShake: {fileID: 0}
+  changeTime: 0.5
   timescale: {x: 0.7, y: 1}
   level: {fileID: 0}
   currWorld: 0
@@ -1180,10 +1181,10 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
+  m_Mass: 60
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 2
   m_Material: {fileID: 6200000, guid: e44fb2aad1815234186867726a35ecb8, type: 2}
   m_Interpolate: 0
   m_SleepingMode: 1
