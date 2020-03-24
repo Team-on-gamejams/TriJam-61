@@ -2,10 +2,8 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Audio;
-using yaSingleton;
 
 //TODO: add audio source pooling 
-[CreateAssetMenu(fileName = "Audio Manager", menuName = "Singletons/AudioManager")]
 public class AudioManager : Singleton<AudioManager> {
 	public enum AudioChannel : byte { Master, Music, Sound, LastChannel }
 
@@ -46,8 +44,7 @@ public class AudioManager : Singleton<AudioManager> {
 	public float defaultSoundVolume = 1;
 	public bool defaultEnabled = true;
 
-	protected override void Initialize() {
-		base.Initialize();
+	protected void Initialize() {
 
 		SceneManager.sceneLoaded += InitAfterLoad;
 
