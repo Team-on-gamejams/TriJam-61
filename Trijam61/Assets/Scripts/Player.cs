@@ -12,6 +12,8 @@ public class Player : MonoBehaviour {
 	[SerializeField] float jumpForce = 20.0f;
 	[SerializeField] LayerMask groundMask;
 	[SerializeField] Transform groundCheck;
+	[SerializeField] float fallMultiplier = 2.5f;
+	[SerializeField] float lowJumpMultiplier = 2f;
 
 	[Header("Worlds")]
 	[SerializeField] GeneralCameraShake cameraShake = null;
@@ -152,9 +154,17 @@ public class Player : MonoBehaviour {
 		Vector3 targetVelocity = new Vector2(direction.x * moveSpeed, rb.velocity.y);
 		rb.velocity = Vector3.SmoothDamp(rb.velocity, targetVelocity, ref m_Velocity, .05f);
 
-		if (isGrounded && direction.y >= 0.5f) {
+		bool isPressJump = direction.y >= 0.5f;
+		if (isGrounded && isPressJump) {
 			isGrounded = false;
 			rb.AddForce(new Vector2(0f, jumpForce), ForceMode2D.Impulse);
+		}
+
+		if(rb.velocity.y < 0) {
+			rb.velocity += Vector2.up * Physics2D.gravity.y * (fallMultiplier - 1) * Time.deltaTime;
+		}
+		else if(rb.velocity.y > 0 && !isPressJump){
+			rb.velocity += Vector2.up * Physics2D.gravity.y * (lowJumpMultiplier - 1) * Time.deltaTime;
 		}
 
 		if (isGrounded) {
