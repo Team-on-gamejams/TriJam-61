@@ -39,6 +39,8 @@ public class Player : MonoBehaviour {
 	bool isGrounded = true;
 	bool isFacingRight = true;
 	bool isCanControl = true;
+	bool canSwitchWorld = true;
+	bool isDownSwitch = false;
 
 	Coroutine changeWorldRoutine;
 
@@ -50,17 +52,26 @@ public class Player : MonoBehaviour {
 	}
 
 	void Update() {
+		if (Input.GetKeyDown(KeyCode.Escape)) {
+#if UNITY_EDITOR
+			UnityEditor.EditorApplication.isPlaying = false;
+#elif UNITY_WEBPLAYER
+         Application.OpenURL("https://teamon.itch.io/double-sided");
+#else
+         Application.Quit();
+#endif
+		}
+
 		moveInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
 
 		if (!isCanControl)
 			return;
 
-		if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.K)) {
-			cameraShake.ShakeCamera(Vector3.right, currWorld == 0 ? false : true);
-			if (changeWorldRoutine != null)
-				StopCoroutine(changeWorldRoutine);
-			changeWorldRoutine = StartCoroutine(ChangeWorldCoroutine());
-		}
+		if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.K))
+			isDownSwitch = true;
+		else if (Input.GetKeyUp(KeyCode.Space) || Input.GetKeyUp(KeyCode.K))
+			isDownSwitch = false;
+		Switch();
 
 		if (Input.GetKeyDown(KeyCode.R)) {
 			Die();
@@ -68,10 +79,11 @@ public class Player : MonoBehaviour {
 	}
 
 	void FixedUpdate() {
+		//Check is can jump
 		isGrounded = false;
 		Collider2D[] colliders = Physics2D.OverlapCircleAll(groundCheck.position, 0.2f, groundMask);
 		for (int i = 0; i < colliders.Length; i++) {
-			if (colliders[i].gameObject != gameObject && !colliders[i].isTrigger) {
+			if (!colliders[i].isTrigger) {
 				isGrounded = true;
 				isCanControl = true;
 			}
@@ -99,14 +111,14 @@ public class Player : MonoBehaviour {
 	}
 
 	public void Die() {
+		if (changeWorldRoutine != null)
+			StopCoroutine(changeWorldRoutine);
 		transform.position = level.respawnPos.position;
 		isCanControl = false;
 		rb.gravityScale = 0.0f;
 		rb.velocity = Vector3.zero;
-		level.Awake();
-		if(changeWorldRoutine != null)
-			StopCoroutine(changeWorldRoutine);
 		Time.timeScale = timescale.y;
+		level.Awake();
 
 		DieData dieData = dieDatas[currDieDialog];
 
@@ -135,6 +147,17 @@ public class Player : MonoBehaviour {
 				dieData.texts[0].text += "?";
 			}
 		});
+	}
+
+	void Switch() {
+		CheckIsCanSwitch();
+		if (canSwitchWorld && isDownSwitch) {
+			isDownSwitch = false;
+			cameraShake.ShakeCamera(Vector3.right, currWorld == 0 ? false : true);
+			if (changeWorldRoutine != null)
+				StopCoroutine(changeWorldRoutine);
+			changeWorldRoutine = StartCoroutine(ChangeWorldCoroutine());
+		}
 	}
 
 	private void Move(Vector2 direction) {
@@ -256,6 +279,16 @@ public class Player : MonoBehaviour {
 
 		yield return null;
 		changeWorldRoutine = null;
+	}
+
+	void CheckIsCanSwitch() {
+		bool findOverlapTrigger = false;
+		var colliders = Physics2D.OverlapCircleAll(transform.position, 0.25f, groundMask);
+		for (int i = 0; i < colliders.Length; i++) {
+			if (colliders[i].isTrigger)
+				findOverlapTrigger = true;
+		}
+		canSwitchWorld = !findOverlapTrigger;
 	}
 }
 

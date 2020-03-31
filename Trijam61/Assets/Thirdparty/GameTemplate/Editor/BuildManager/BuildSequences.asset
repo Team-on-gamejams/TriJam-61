@@ -230,7 +230,7 @@ MonoBehaviour:
       needSteamPush: 0
       needGoogleDricePush: 0
   - editorName: Local + Zip + itch.io
-    itchGameLink: teamon/cells-hive-mind
+    itchGameLink: https://teamon.itch.io/double-sided
     builds:
     - outputRoot: Builds/
       middlePath: $NAME_$VERSION_$PLATFORM/$NAME_$VERSION/$NAME$EXECUTABLE
