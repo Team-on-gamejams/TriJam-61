@@ -118,6 +118,7 @@ public class Player : MonoBehaviour {
 		rb.gravityScale = 0.0f;
 		rb.velocity = Vector3.zero;
 		Time.timeScale = timescale.y;
+		currWorld = 0;
 		level.Awake();
 
 		DieData dieData = dieDatas[currDieDialog];
