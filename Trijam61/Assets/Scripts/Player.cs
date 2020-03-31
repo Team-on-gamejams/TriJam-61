@@ -71,7 +71,7 @@ public class Player : MonoBehaviour {
 		isGrounded = false;
 		Collider2D[] colliders = Physics2D.OverlapCircleAll(groundCheck.position, 0.2f, groundMask);
 		for (int i = 0; i < colliders.Length; i++) {
-			if (colliders[i].gameObject != gameObject) {
+			if (colliders[i].gameObject != gameObject && !colliders[i].isTrigger) {
 				isGrounded = true;
 				isCanControl = true;
 			}
@@ -214,7 +214,7 @@ public class Player : MonoBehaviour {
 		while ((t += Time.deltaTime) <= changeTime) {
 			realTime += Time.deltaTime;
 			foreach (var g in curr.grids) 
-				g.color = Color.Lerp(startColorCurr, Color.clear, realTime / realChangeTime);
+				g.color = Color.Lerp(startColorCurr, Level.invinsibleColor, realTime / realChangeTime);
 			foreach (var g in curr.groups)
 				g.alpha = curr.grids[0].color.a;
 			foreach (var s in curr.sprites)
@@ -227,13 +227,13 @@ public class Player : MonoBehaviour {
 			foreach (var s in next.sprites)
 				s.color = next.grids[0].color;
 
-			if (t > timeq1 && !next.colliders[0].enabled) {
-				foreach (var c in next.colliders)
-					c.enabled = true;
+			if (t > timeq1 && next.compositeColliders[0].isTrigger) {
+				foreach (var c in next.compositeColliders)
+					c.isTrigger = false;
 			}
-			else if (t > timeq3 && curr.colliders[0].enabled) {
-				foreach (var c in curr.colliders)
-					c.enabled = false;
+			else if (t > timeq3 && !curr.compositeColliders[0].isTrigger) {
+				foreach (var c in curr.compositeColliders)
+					c.isTrigger = true;
 			}
 
 			if(t <= timehalf)
@@ -245,11 +245,11 @@ public class Player : MonoBehaviour {
 		}
 
 		foreach (var g in curr.grids)
-			g.color = Color.clear;
+			g.color = Level.invinsibleColor;
 		foreach (var g in next.grids)
 			g.color = Color.white;
 		foreach (var g in curr.sprites)
-			g.color = Color.clear;
+			g.color = Level.invinsibleColor;
 		foreach (var g in next.sprites)
 			g.color = Color.white;
 		Time.timeScale = timescale.y;

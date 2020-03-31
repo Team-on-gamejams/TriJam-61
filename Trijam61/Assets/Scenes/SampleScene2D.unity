@@ -3533,6 +3533,8 @@ MonoBehaviour:
     colliders:
     - {fileID: 656934809}
     - {fileID: 773362958}
+    compositeColliders:
+    - {fileID: 656934807}
     sprites:
     - {fileID: 773362959}
     - {fileID: 1639898249}
@@ -3544,6 +3546,8 @@ MonoBehaviour:
     groups: []
     colliders:
     - {fileID: 293512837}
+    compositeColliders:
+    - {fileID: 293512835}
     sprites: []
 --- !u!1 &515048675
 GameObject:
@@ -7590,6 +7594,8 @@ MonoBehaviour:
     groups: []
     colliders:
     - {fileID: 684844664}
+    compositeColliders:
+    - {fileID: 684844662}
     sprites: []
   - parent: {fileID: 1951096241}
     grids:
@@ -7599,6 +7605,8 @@ MonoBehaviour:
     groups: []
     colliders:
     - {fileID: 1390653846}
+    compositeColliders:
+    - {fileID: 1390653844}
     sprites: []
 --- !u!1 &975654986
 GameObject:
@@ -10257,6 +10265,9 @@ MonoBehaviour:
     colliders:
     - {fileID: 434260004}
     - {fileID: 1712038738}
+    compositeColliders:
+    - {fileID: 434260002}
+    - {fileID: 1712038736}
     sprites: []
   - parent: {fileID: 1772306932}
     grids:
@@ -10271,6 +10282,9 @@ MonoBehaviour:
     - {fileID: 1278028786}
     - {fileID: 1169537338}
     - {fileID: 1022198377}
+    compositeColliders:
+    - {fileID: 1278028784}
+    - {fileID: 1169537336}
     sprites:
     - {fileID: 1022198378}
     - {fileID: 218375718}
@@ -10332,6 +10346,8 @@ MonoBehaviour:
     - {fileID: 473662804}
     colliders:
     - {fileID: 515048679}
+    compositeColliders:
+    - {fileID: 515048677}
     sprites: []
   - parent: {fileID: 704849774}
     grids:
@@ -10342,6 +10358,8 @@ MonoBehaviour:
     - {fileID: 734094350}
     colliders:
     - {fileID: 1791741777}
+    compositeColliders:
+    - {fileID: 1791741775}
     sprites: []
 --- !u!1001 &1379141794
 PrefabInstance:
