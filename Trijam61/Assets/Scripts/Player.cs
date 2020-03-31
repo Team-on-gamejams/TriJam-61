@@ -67,9 +67,9 @@ public class Player : MonoBehaviour {
 		if (!isCanControl)
 			return;
 
-		if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.K))
+		if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.K) || Input.GetKeyDown(KeyCode.Z))
 			isDownSwitch = true;
-		else if (Input.GetKeyUp(KeyCode.Space) || Input.GetKeyUp(KeyCode.K))
+		else if (Input.GetKeyUp(KeyCode.Space) || Input.GetKeyUp(KeyCode.K) || Input.GetKeyUp(KeyCode.Z))
 			isDownSwitch = false;
 		Switch();
 
