@@ -106,21 +106,6 @@ MonoBehaviour:
       needGamejolthPush: 0
       needSteamPush: 0
       needGoogleDricePush: 0
-    - outputRoot: Builds/
-      middlePath: $NAME_$VERSION_$PLATFORM$EXECUTABLE
-      targetGroup: 4
-      target: 9
-      options: 0
-      needZip: 0
-      compressDirPath: 
-      needItchPush: 0
-      itchChannel: 
-      itchDirPath: 
-      useGithubActions: 0
-      useUnityActions: 0
-      needGamejolthPush: 0
-      needSteamPush: 0
-      needGoogleDricePush: 0
   - editorName: Local + Zip
     itchGameLink: 
     builds:
@@ -206,21 +191,6 @@ MonoBehaviour:
       options: 0
       needZip: 0
       compressDirPath: 
-      needItchPush: 0
-      itchChannel: 
-      itchDirPath: 
-      useGithubActions: 0
-      useUnityActions: 0
-      needGamejolthPush: 0
-      needSteamPush: 0
-      needGoogleDricePush: 0
-    - outputRoot: Builds/
-      middlePath: $NAME_$VERSION_$PLATFORM$EXECUTABLE
-      targetGroup: 4
-      target: 9
-      options: 0
-      needZip: 1
-      compressDirPath: $NAME_$VERSION_$PLATFORM$EXECUTABLE
       needItchPush: 0
       itchChannel: 
       itchDirPath: 
