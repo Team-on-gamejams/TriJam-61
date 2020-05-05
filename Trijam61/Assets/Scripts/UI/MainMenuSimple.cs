@@ -1,10 +1,11 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.EventSystems;
 using Cinemachine;
 using NaughtyAttributes;
-using System;
-using UnityEngine.UI;
 
 public class MainMenuSimple : MonoBehaviour {
 	[NonSerialized] public bool isInMenu;
@@ -21,6 +22,9 @@ public class MainMenuSimple : MonoBehaviour {
 	[SerializeField] CinemachineVirtualCamera gameCamera;
 	[Space]
 	[SerializeField] Button playButton;
+	[SerializeField] Button levelsButton;
+	[SerializeField] Button settingsButton;
+	[SerializeField] Button exitButton;
 
 	float alpha;
 
@@ -28,6 +32,19 @@ public class MainMenuSimple : MonoBehaviour {
 		alpha = canvasGroup.alpha;
 
 		ShowMainMenu(true);
+	}
+
+	private void Start() {
+		playButton.Select();
+	}
+
+	private void Update() {
+		if (isInMenu && EventSystem.current.currentSelectedGameObject == null && new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")).magnitude >= 0.5f) {
+			if(isInGameMenu)
+				levelsButton.Select();
+			else
+				playButton.Select();
+		}
 	}
 
 	public void OnPlayClick() {
@@ -43,21 +60,27 @@ public class MainMenuSimple : MonoBehaviour {
 	}
 
 	public void ShowMainMenu(bool isForce) {
-		canvasGroup.interactable = true;
-		canvasGroup.blocksRaycasts = true;
+		isInMenu = true;
+
 		if (isForce)
 			canvasGroup.alpha = alpha;
 		else
 			LeanTweenEx.ChangeCanvasGroupAlpha(canvasGroup, alpha, 0.33f);
+		canvasGroup.interactable = true;
+		canvasGroup.blocksRaycasts = true;
 
 		menuCamera.enabled = true;
 		gameCamera.enabled = false;
 		camera.cullingMask = LayerMask.GetMask(layerMaskMenu);
+
 		playButton.gameObject.SetActive(true);
-		isInMenu = true;
+		playButton.Select();
+		//playButton.Select();
 	}
 
 	public void HideGameMenu() {
+		isInMenu = false;
+		
 		canvasGroup.interactable = false;
 		canvasGroup.blocksRaycasts = false;
 		LeanTweenEx.ChangeCanvasGroupAlpha(canvasGroup, 0.0f, 0.33f);
@@ -65,18 +88,20 @@ public class MainMenuSimple : MonoBehaviour {
 		menuCamera.enabled = false;
 		gameCamera.enabled = true;
 		camera.cullingMask = LayerMask.GetMask(layerMaskGame);
-
-		isInMenu = false;
 	}
 
 	public void ShowInGameMenu() {
 		isInGameMenu = true;
+
 		ShowMainMenu(false);
+
 		playButton.gameObject.SetActive(false);
+		levelsButton.Select();
 	}
 
 	public void HideInGameMenu() {
 		isInGameMenu = false;
+
 		HideGameMenu();
 	}
 }
