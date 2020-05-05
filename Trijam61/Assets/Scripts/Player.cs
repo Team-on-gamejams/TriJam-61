@@ -181,6 +181,7 @@ public class Player : MonoBehaviour {
 		bool isPressJump = direction.y >= 0.5f;
 		if (isGrounded && isPressJump) {
 			isGrounded = false;
+			rb.velocity = new Vector2(rb.velocity.x, 0);
 			rb.AddForce(new Vector2(0f, jumpForce), ForceMode2D.Impulse);
 		}
 

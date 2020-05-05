@@ -5284,7 +5284,7 @@ RectTransform:
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
   m_AnchoredPosition: {x: -15, y: 10}
-  m_SizeDelta: {x: 236.91, y: 39.35}
+  m_SizeDelta: {x: 641.8, y: 39.3}
   m_Pivot: {x: 1, y: 0}
 --- !u!114 &503099591
 MonoBehaviour:
@@ -5304,7 +5304,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: v0.3
+  m_text: v0.3 - core mechanics update
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: dc36b3fdc14f47ebb36fd484a67e268a, type: 2}
   m_sharedMaterial: {fileID: 2140032, guid: dc36b3fdc14f47ebb36fd484a67e268a, type: 2}
@@ -5373,10 +5373,10 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_textInfo:
     textComponent: {fileID: 503099591}
-    characterCount: 4
+    characterCount: 28
     spriteCount: 0
-    spaceCount: 0
-    wordCount: 2
+    spaceCount: 4
+    wordCount: 6
     linkCount: 0
     lineCount: 1
     pageCount: 1
@@ -22264,6 +22264,16 @@ PrefabInstance:
       propertyPath: mainMenu
       value: 
       objectReference: {fileID: 5185208}
+    - target: {fileID: 6213688061617813625, guid: a6bb5c6925fb0f44fab58aa72af1435c,
+        type: 3}
+      propertyPath: jumpForce
+      value: 750
+      objectReference: {fileID: 0}
+    - target: {fileID: 6213688061617813627, guid: a6bb5c6925fb0f44fab58aa72af1435c,
+        type: 3}
+      propertyPath: m_CollisionDetection
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6213688061617813630, guid: a6bb5c6925fb0f44fab58aa72af1435c,
         type: 3}
       propertyPath: m_Name
