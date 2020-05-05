@@ -47,7 +47,7 @@ TagManager:
     uniqueID: 0
     locked: 0
   - name: Decor
-    uniqueID: 3782928001
+    uniqueID: 3828954649
     locked: 0
   - name: Player
     uniqueID: 2565691067
@@ -56,5 +56,5 @@ TagManager:
     uniqueID: 460700713
     locked: 0
   - name: DecorOverlay
-    uniqueID: 3828954649
+    uniqueID: 3782928001
     locked: 0

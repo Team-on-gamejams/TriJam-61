@@ -31,6 +31,9 @@ public class Player : MonoBehaviour {
 	[SerializeField] TextMeshProUGUI winText;
 	[SerializeField] float winTextTime;
 
+	[Header("Refs")]
+	[SerializeField] MainMenuSimple mainMenu;
+
 	[HideInInspector] [SerializeField] Rigidbody2D rb;
 	[HideInInspector] [SerializeField] Animator anim;
 
@@ -38,7 +41,7 @@ public class Player : MonoBehaviour {
 	Vector3 m_Velocity = Vector3.zero;
 	bool isGrounded = true;
 	bool isFacingRight = true;
-	bool isCanControl = true;
+	[NonSerialized] public bool isCanControl = false;
 	bool canSwitchWorld = true;
 	bool isDownSwitch = false;
 
@@ -52,19 +55,16 @@ public class Player : MonoBehaviour {
 	}
 
 	void Update() {
-		if (Input.GetKeyDown(KeyCode.Escape)) {
-#if UNITY_EDITOR
-			UnityEditor.EditorApplication.isPlaying = false;
-#elif UNITY_WEBPLAYER
-         Application.OpenURL("https://teamon.itch.io/double-sided");
-#else
-         Application.Quit();
-#endif
-		}
-
 		moveInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
 
-		if (!isCanControl)
+		if (Input.GetKeyDown(KeyCode.Escape)) {
+			if (mainMenu.isInMenu)
+				mainMenu.HideInGameMenu();
+			else
+				mainMenu.ShowInGameMenu();
+		}
+
+		if (!isCanControl || mainMenu.isInMenu)
 			return;
 
 		if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.K) || Input.GetKeyDown(KeyCode.Z))
@@ -169,7 +169,7 @@ public class Player : MonoBehaviour {
 			Flip();
 		}
 
-		if (!isCanControl) {
+		if (!isCanControl || mainMenu.isInMenu) {
 			rb.velocity = Vector3.SmoothDamp(rb.velocity, new Vector2(0, rb.velocity.y), ref m_Velocity, .05f);
 			anim.SetBool("IsMoving", moveInput != Vector2.zero);
 			return;
