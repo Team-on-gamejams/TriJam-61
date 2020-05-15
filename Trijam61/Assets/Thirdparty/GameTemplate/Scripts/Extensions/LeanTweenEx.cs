@@ -6,6 +6,13 @@ using TMPro;
 
 public static class LeanTweenEx
 {
+	public static LTDescr ChangeCanvasGroupAlpha(GameObject go, CanvasGroup canvasGroup, float alpha, float animTime) {
+		return LeanTween.value(go, canvasGroup.alpha, alpha, animTime)
+			.setOnUpdate((float a) => {
+				canvasGroup.alpha = a;
+			});
+	}
+
 	public static LTDescr ChangeCanvasGroupAlpha(CanvasGroup canvasGroup, float alpha, float animTime)
 	{
 		return LeanTween.value(canvasGroup.gameObject, canvasGroup.alpha, alpha, animTime)

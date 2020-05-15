@@ -46,6 +46,7 @@ public class Player : MonoBehaviour {
 	bool isDownSwitch = false;
 
 	Coroutine changeWorldRoutine;
+	Coroutine changeLevelTextColorRoutine;
 
 	void OnValidate() {
 		if (rb == null)
@@ -96,6 +97,7 @@ public class Player : MonoBehaviour {
 		level = l;
 		transform.position = level.respawnPos.position;
 		currWorld = 0;
+		mainMenu.ToNormalWorldLens(changeTime, true);
 	}
 
 	public void Win() {
@@ -119,6 +121,7 @@ public class Player : MonoBehaviour {
 		rb.velocity = Vector3.zero;
 		Time.timeScale = timescale.y;
 		currWorld = 0;
+		mainMenu.ToNormalWorldLens(changeTime, true);
 		level.Awake();
 
 		DieData dieData = dieDatas[currDieDialog];
@@ -185,10 +188,10 @@ public class Player : MonoBehaviour {
 			rb.AddForce(new Vector2(0f, jumpForce), ForceMode2D.Impulse);
 		}
 
-		if(rb.velocity.y < 0) {
+		if (rb.velocity.y < 0) {
 			rb.velocity += Vector2.up * Physics2D.gravity.y * (fallMultiplier - 1) * Time.deltaTime;
 		}
-		else if(rb.velocity.y > 0 && !isPressJump){
+		else if (rb.velocity.y > 0 && !isPressJump) {
 			rb.velocity += Vector2.up * Physics2D.gravity.y * (lowJumpMultiplier - 1) * Time.deltaTime;
 		}
 
@@ -218,6 +221,11 @@ public class Player : MonoBehaviour {
 			currWorld = 0;
 		Level.World next = level.worlds[currWorld];
 
+		if (currWorld == 0)
+			mainMenu.ToNormalWorldLens(changeTime, false);
+		else
+			mainMenu.ToNegativeWorldLens(changeTime, false);
+
 		float t = 0;
 		float timeq1 = changeTime / 4;
 		float timehalf = changeTime / 2;
@@ -238,7 +246,7 @@ public class Player : MonoBehaviour {
 
 		while ((t += Time.deltaTime) <= changeTime) {
 			realTime += Time.deltaTime;
-			foreach (var g in curr.grids) 
+			foreach (var g in curr.grids)
 				g.color = Color.Lerp(startColorCurr, Level.invinsibleColor, realTime / realChangeTime);
 			foreach (var g in curr.groups)
 				g.alpha = curr.grids[0].color.a;
@@ -261,7 +269,7 @@ public class Player : MonoBehaviour {
 					c.isTrigger = true;
 			}
 
-			if(t <= timehalf)
+			if (t <= timehalf)
 				Time.timeScale = Mathf.Lerp(timescale.y, timescale.x, Mathf.Clamp01(t / timehalf));
 			else
 				Time.timeScale = Mathf.Lerp(timescale.x, timescale.y, Mathf.Clamp01((t - timehalf) / timehalf));
@@ -291,6 +299,38 @@ public class Player : MonoBehaviour {
 				findOverlapTrigger = true;
 		}
 		canSwitchWorld = !findOverlapTrigger;
+	}
+
+	public void ChangeLevelTextAlpha(float time, float endAlpha, bool isForce) {
+		Level.World curr = level.worlds[currWorld];
+		if (curr.groups == null || curr.groups.Length == 0)
+			return;
+
+		if (isForce) {
+			foreach (var g in curr.groups)
+				g.alpha = endAlpha;
+		}
+		else {
+			changeLevelTextColorRoutine = StartCoroutine(ChangeTextAlpha());
+		}
+
+		IEnumerator ChangeTextAlpha() {
+			float t = 0;
+			float startColorCurr = curr.groups[0].alpha;
+
+			while ((t += Time.deltaTime) <= time) {
+				foreach (var g in curr.groups)
+					g.alpha = Mathf.Lerp(startColorCurr, endAlpha, t / time);
+				yield return null;
+			}
+			changeLevelTextColorRoutine = null;
+		}
+	}
+
+	public void StopChangeLevelTextAlpha() {
+		if (changeLevelTextColorRoutine != null) {
+			StopCoroutine(changeLevelTextColorRoutine);
+		}
 	}
 }
 

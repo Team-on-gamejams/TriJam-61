@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using UnityEngine.Rendering.PostProcessing;
 using Cinemachine;
 using NaughtyAttributes;
 
@@ -15,26 +16,37 @@ public class MainMenuSimple : MonoBehaviour {
 	[Space]
 	[SerializeField] Player player;
 	[Space]
-	[SerializeField] string[] layerMaskMenu;
-	[SerializeField] string[] layerMaskGame;
 	[SerializeField] Camera camera;
-	[SerializeField] CinemachineVirtualCamera menuCamera;
-	[SerializeField] CinemachineVirtualCamera gameCamera;
+	[SerializeField] CinemachineVirtualCamera virtualCamera;
+	[SerializeField] Transform mainMenuCamereTarget;
 	[Space]
 	[SerializeField] Button playButton;
 	[SerializeField] Button levelsButton;
 	[SerializeField] Button settingsButton;
 	[SerializeField] Button exitButton;
 
-	float alpha;
+	[Header("Post Processing")]
+	[Space]
+	[SerializeField] PostProcessVolume postProcessVolume;
+	Grain grain;
+	LensDistortion lensDistortion;
+
+	float menuDefaultAlpha;
+	float defaultLensDistortionIntensity;
+	float defaultGrainIntensity;
 
 	private void Awake() {
-		alpha = canvasGroup.alpha;
+		postProcessVolume.profile.TryGetSettings(out grain);
+		postProcessVolume.profile.TryGetSettings(out lensDistortion);
 
-		ShowMainMenu(true);
+		menuDefaultAlpha = canvasGroup.alpha;
+		defaultLensDistortionIntensity = lensDistortion.intensity.value;
+		defaultGrainIntensity = grain.intensity.value;
 	}
 
 	private void Start() {
+		ShowMainMenu(true);
+
 		playButton.Select();
 	}
 
@@ -60,34 +72,64 @@ public class MainMenuSimple : MonoBehaviour {
 	}
 
 	public void ShowMainMenu(bool isForce) {
+		LeanTween.cancel(gameObject, false);
+		player.StopChangeLevelTextAlpha();
 		isInMenu = true;
 
-		if (isForce)
-			canvasGroup.alpha = alpha;
-		else
-			LeanTweenEx.ChangeCanvasGroupAlpha(canvasGroup, alpha, 0.33f);
 		canvasGroup.interactable = true;
 		canvasGroup.blocksRaycasts = true;
 
-		menuCamera.enabled = true;
-		gameCamera.enabled = false;
-		camera.cullingMask = LayerMask.GetMask(layerMaskMenu);
+		virtualCamera.Follow = mainMenuCamereTarget;
+		
+
+		if (isForce) {
+			grain.intensity.value = defaultGrainIntensity;
+			canvasGroup.alpha = menuDefaultAlpha;
+			player.ChangeLevelTextAlpha(0.0f, 0.0f, true);
+			virtualCamera.m_Lens.OrthographicSize = 2;
+		}
+		else {
+			LeanTween.value(gameObject, grain.intensity.value, defaultGrainIntensity, 0.33f)
+			.setOnUpdate((float intensity) => {
+				grain.intensity.value = intensity;
+			});
+
+			LeanTweenEx.ChangeCanvasGroupAlpha(gameObject, canvasGroup, menuDefaultAlpha, 0.33f);
+
+			player.ChangeLevelTextAlpha(0.33f, 0.0f, false);
+
+			LeanTween.value(gameObject, virtualCamera.m_Lens.OrthographicSize, 2.0f, 1.0f)
+			.setOnUpdate((float size) => {
+				virtualCamera.m_Lens.OrthographicSize = size;
+			});
+		}
 
 		playButton.gameObject.SetActive(true);
 		playButton.Select();
-		//playButton.Select();
 	}
 
 	public void HideGameMenu() {
+		LeanTween.cancel(gameObject, false);
+		player.StopChangeLevelTextAlpha();
 		isInMenu = false;
 		
 		canvasGroup.interactable = false;
 		canvasGroup.blocksRaycasts = false;
-		LeanTweenEx.ChangeCanvasGroupAlpha(canvasGroup, 0.0f, 0.33f);
 
-		menuCamera.enabled = false;
-		gameCamera.enabled = true;
-		camera.cullingMask = LayerMask.GetMask(layerMaskGame);
+		virtualCamera.Follow = player.transform;
+		LeanTween.value(gameObject, virtualCamera.m_Lens.OrthographicSize, 5.0f, 1.0f)
+		.setOnUpdate((float size) => { 
+			virtualCamera.m_Lens.OrthographicSize = size;
+		});
+
+		LeanTween.value(gameObject, grain.intensity.value, 0, 0.33f)
+		.setOnUpdate((float intensity) => {
+			grain.intensity.value = intensity;
+		});
+
+		LeanTweenEx.ChangeCanvasGroupAlpha(gameObject, canvasGroup, 0.0f, 0.33f);
+
+		player.ChangeLevelTextAlpha(0.33f, 1.0f, false);
 	}
 
 	public void ShowInGameMenu() {
@@ -103,5 +145,29 @@ public class MainMenuSimple : MonoBehaviour {
 		isInGameMenu = false;
 
 		HideGameMenu();
+	}
+
+	public void ToNormalWorldLens(float time, bool isForce) {
+		if (isForce) {
+				lensDistortion.intensity.value = defaultLensDistortionIntensity;
+			return;
+		}
+
+		LeanTween.value(lensDistortion.intensity.value, defaultLensDistortionIntensity, time)
+			.setOnUpdate((float intensity) => {
+				lensDistortion.intensity.value = intensity;
+			});
+	}
+
+	public void ToNegativeWorldLens(float time, bool isForce) {
+		if (isForce) {
+			lensDistortion.intensity.value = -defaultLensDistortionIntensity;
+			return;
+		}
+
+		LeanTween.value(lensDistortion.intensity.value, -defaultLensDistortionIntensity, time)
+			.setOnUpdate((float intensity) => {
+				lensDistortion.intensity.value = intensity;
+			});
 	}
 }
