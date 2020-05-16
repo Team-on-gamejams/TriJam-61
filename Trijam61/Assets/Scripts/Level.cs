@@ -7,6 +7,7 @@ public class Level : MonoBehaviour {
 	public static Color invinsibleColor = new Color(1, 1, 1, 0.05f);
 
 	public Transform respawnPos;
+	public bool isDefaultWorldNormal = true;
 	public World[] worlds;
 
 #if UNITY_EDITOR
@@ -16,7 +17,8 @@ public class Level : MonoBehaviour {
 			worlds[i].grids = null;
 			worlds[i].compositeColliders = null;
 			worlds[i].groups = null;
-			worlds[i].colliders = null;
+			worlds[i].collidersNotTriggers = null;
+			worlds[i].collidersTriggers = null;
 			worlds[i].sprites = null;
 		}
 
@@ -25,19 +27,29 @@ public class Level : MonoBehaviour {
 
 	private void OnValidate() {
 		for(byte i = 0; i < worlds.Length; ++i) {
-			if(worlds[i].colliders == null || worlds[i].colliders.Length == 0) {
-				List<Collider2D> colliders = new List<Collider2D>();
+			if(worlds[i].compositeColliders == null || worlds[i].compositeColliders.Length == 0) {
+				List<Collider2D> collidersTrigger = new List<Collider2D>();
+				List<Collider2D> collidersNotTrigger = new List<Collider2D>();
 				List<CompositeCollider2D> collidersComp = new List<CompositeCollider2D>();
 
 				Collider2D[] collidersAll = worlds[i].parent.GetComponentsInChildren<Collider2D>();
 				foreach (Collider2D c in collidersAll) {
-					if (!(c is CompositeCollider2D))
-						colliders.Add(c);
-					else
+					if (!(c is CompositeCollider2D)) {
+						if (c is TilemapCollider2D)	//Skip cuz is always Composite collider
+							continue;
+
+						if(c.isTrigger)
+							collidersTrigger.Add(c);
+						else
+							collidersNotTrigger.Add(c);
+					}
+					else {
 						collidersComp.Add(c as CompositeCollider2D);
+					}
 				}
 
-				worlds[i].colliders = colliders.ToArray();
+				worlds[i].collidersTriggers = collidersTrigger.ToArray();
+				worlds[i].collidersNotTriggers = collidersNotTrigger.ToArray();
 				worlds[i].compositeColliders = collidersComp.ToArray();
 			}
 
@@ -97,7 +109,8 @@ public class Level : MonoBehaviour {
 
 		public Tilemap[] grids;
 		public CanvasGroup[] groups;
-		public Collider2D[] colliders;
+		public Collider2D[] collidersTriggers;
+		public Collider2D[] collidersNotTriggers;
 		public CompositeCollider2D[] compositeColliders;
 		public SpriteRenderer[] sprites;
 	}

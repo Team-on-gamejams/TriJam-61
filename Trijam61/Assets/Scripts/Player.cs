@@ -96,14 +96,16 @@ public class Player : MonoBehaviour {
 	public void OnNewLevel(Level l) {
 		level = l;
 		transform.position = level.respawnPos.position;
-		currWorld = 0;
-		mainMenu.ToNormalWorldLens(changeTime, true);
-	}
 
-	public void Win() {
 		isCanControl = false;
 		rb.gravityScale = 0.0f;
 		rb.velocity = Vector3.zero;
+
+		currWorld = 0;
+		if(level.isActiveAndEnabled)
+			mainMenu.ToNormalWorldLens(changeTime, true);
+		else
+			mainMenu.ToNegativeWorldLens(changeTime, true);
 
 		winText.gameObject.SetActive(true);
 		LeanTween.delayedCall(winTextTime, () => {
@@ -121,7 +123,10 @@ public class Player : MonoBehaviour {
 		rb.velocity = Vector3.zero;
 		Time.timeScale = timescale.y;
 		currWorld = 0;
-		mainMenu.ToNormalWorldLens(changeTime, true);
+		if (level.isActiveAndEnabled)
+			mainMenu.ToNormalWorldLens(changeTime, true);
+		else
+			mainMenu.ToNegativeWorldLens(changeTime, true);
 		level.Awake();
 
 		DieData dieData = dieDatas[currDieDialog];
@@ -269,6 +274,24 @@ public class Player : MonoBehaviour {
 					c.isTrigger = true;
 			}
 
+			if (t > timeq1 && next.collidersNotTriggers?.Length != 0 && next.collidersNotTriggers[0].isTrigger) {
+				foreach (var c in next.collidersNotTriggers)
+					c.isTrigger = false;
+			}
+			else if (t > timeq3 && curr.collidersNotTriggers?.Length != 0 && !curr.collidersNotTriggers[0].isTrigger) {
+				foreach (var c in curr.collidersNotTriggers)
+					c.isTrigger = true;
+			}
+
+			if (t > timeq1 && next.collidersTriggers?.Length != 0 && !next.collidersTriggers[0].enabled) {
+				foreach (var c in next.collidersTriggers)
+					c.enabled = true;
+			}
+			else if (t > timeq3 && curr.collidersTriggers?.Length != 0 && curr.collidersTriggers[0].enabled) {
+				foreach (var c in curr.collidersTriggers)
+					c.enabled = false;
+			}
+
 			if (t <= timehalf)
 				Time.timeScale = Mathf.Lerp(timescale.y, timescale.x, Mathf.Clamp01(t / timehalf));
 			else
@@ -323,6 +346,10 @@ public class Player : MonoBehaviour {
 					g.alpha = Mathf.Lerp(startColorCurr, endAlpha, t / time);
 				yield return null;
 			}
+			yield return null;
+			foreach (var g in curr.groups)
+				g.alpha = endAlpha;
+
 			changeLevelTextColorRoutine = null;
 		}
 	}

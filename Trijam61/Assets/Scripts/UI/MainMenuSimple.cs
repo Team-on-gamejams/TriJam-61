@@ -169,6 +169,8 @@ public class MainMenuSimple : MonoBehaviour {
 	}
 
 	public void ToNormalWorldLens(float time, bool isForce) {
+		LeanTween.cancel(gameObject);
+
 		if (isForce) {
 				lensDistortion.intensity.value = defaultLensDistortionIntensity;
 				bloom.color.value = bloomColorPositive;
@@ -187,6 +189,8 @@ public class MainMenuSimple : MonoBehaviour {
 	}
 
 	public void ToNegativeWorldLens(float time, bool isForce) {
+		LeanTween.cancel(gameObject);
+		
 		if (isForce) {
 			lensDistortion.intensity.value = -defaultLensDistortionIntensity;
 				bloom.color.value = bloomColorNegative;

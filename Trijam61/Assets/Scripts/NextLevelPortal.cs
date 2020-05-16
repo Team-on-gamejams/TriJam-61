@@ -9,7 +9,6 @@ public class NextLevelPortal : MonoBehaviour {
 		if (collision.tag == "Player") {
 			Player pl = collision.GetComponent<Player>();
 			pl.OnNewLevel(nextLevel);
-			pl.Win();
 		}
 	}
 }
