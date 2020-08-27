@@ -24,6 +24,10 @@ public class MainMenuSimple : MonoBehaviour {
 	[SerializeField] Button levelsButton;
 	[SerializeField] Button settingsButton;
 	[SerializeField] Button exitButton;
+	[Header("Other menu")]
+	[Space]
+	[SerializeField] OptionsMenu optionsMenu;
+	[SerializeField] LevelsSelectionMenu levelsSelectionMenu;
 
 	[Header("Post Processing")]
 	[Space]
@@ -41,6 +45,10 @@ public class MainMenuSimple : MonoBehaviour {
 	float defaultChromaticAberrationIntensity;
 
 	private void Awake() {
+		canvasGroup.interactable = true;
+		canvasGroup.blocksRaycasts = true;
+		canvasGroup.alpha = 1.0f;
+
 		postProcessVolume.profile.TryGetSettings(out grain);
 		postProcessVolume.profile.TryGetSettings(out lensDistortion);
 		postProcessVolume.profile.TryGetSettings(out chromaticAberration);
@@ -57,16 +65,16 @@ public class MainMenuSimple : MonoBehaviour {
 	private void Start() {
 		ShowMainMenu(true);
 
-		playButton.Select();
+		//playButton.Select();
 	}
 
 	private void Update() {
-		if (isInMenu && EventSystem.current.currentSelectedGameObject == null && new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")).magnitude >= 0.5f) {
-			if(isInGameMenu)
-				levelsButton.Select();
-			else
-				playButton.Select();
-		}
+		//if (isInMenu && EventSystem.current.currentSelectedGameObject == null && new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")).magnitude >= 0.5f) {
+		//	if(isInGameMenu)
+		//		levelsButton.Select();
+		//	else
+		//		playButton.Select();
+		//}
 	}
 
 	public void OnPlayClick() {
@@ -74,11 +82,11 @@ public class MainMenuSimple : MonoBehaviour {
 	}
 
 	public void OnLevelsClick() {
-		HideGameMenu();
+		levelsSelectionMenu.Show();
 	}
 
 	public void OnSettingsClick() {
-		HideGameMenu();
+		optionsMenu.Show();
 	}
 
 	public void ShowMainMenu(bool isForce) {
@@ -90,7 +98,6 @@ public class MainMenuSimple : MonoBehaviour {
 		canvasGroup.blocksRaycasts = true;
 
 		virtualCamera.Follow = mainMenuCamereTarget;
-		
 
 		if (isForce) {
 			grain.intensity.value = defaultGrainIntensity;
@@ -121,7 +128,23 @@ public class MainMenuSimple : MonoBehaviour {
 		}
 
 		playButton.gameObject.SetActive(true);
-		playButton.Select();
+		//playButton.Select();
+	}
+
+	public void OnOtherMenuEnter() {
+		LeanTween.cancel(gameObject, false);
+
+		LeanTweenEx.ChangeCanvasGroupAlpha(gameObject, canvasGroup, 0.0f, 0.33f);
+		canvasGroup.interactable = false;
+		canvasGroup.blocksRaycasts = false;
+	}
+
+	public void OnOtherMenuExit() {
+		LeanTween.cancel(gameObject, false);
+
+		LeanTweenEx.ChangeCanvasGroupAlpha(gameObject, canvasGroup, menuDefaultAlpha, 0.33f);
+		canvasGroup.interactable = true;
+		canvasGroup.blocksRaycasts = true;
 	}
 
 	public void HideGameMenu() {
@@ -151,6 +174,9 @@ public class MainMenuSimple : MonoBehaviour {
 		LeanTweenEx.ChangeCanvasGroupAlpha(gameObject, canvasGroup, 0.0f, 0.33f);
 
 		player.ChangeLevelTextAlpha(0.33f, 1.0f, false);
+
+		optionsMenu.HideCanvas();
+		levelsSelectionMenu.HideCanvas();
 	}
 
 	public void ShowInGameMenu() {
@@ -159,7 +185,7 @@ public class MainMenuSimple : MonoBehaviour {
 		ShowMainMenu(false);
 
 		playButton.gameObject.SetActive(false);
-		levelsButton.Select();
+		//levelsButton.Select();
 	}
 
 	public void HideInGameMenu() {

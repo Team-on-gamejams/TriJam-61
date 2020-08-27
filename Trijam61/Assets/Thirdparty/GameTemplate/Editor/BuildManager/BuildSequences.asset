@@ -184,21 +184,6 @@ MonoBehaviour:
       needGamejolthPush: 0
       needSteamPush: 0
       needGoogleDricePush: 0
-    - outputRoot: Builds/
-      middlePath: $NAME_$VERSION_$PLATFORM$EXECUTABLE
-      targetGroup: 7
-      target: 13
-      options: 0
-      needZip: 0
-      compressDirPath: 
-      needItchPush: 0
-      itchChannel: 
-      itchDirPath: 
-      useGithubActions: 0
-      useUnityActions: 0
-      needGamejolthPush: 0
-      needSteamPush: 0
-      needGoogleDricePush: 0
   - editorName: Local + Zip + itch.io
     itchGameLink: https://teamon.itch.io/double-sided
     builds:
@@ -272,6 +257,24 @@ MonoBehaviour:
       needItchPush: 1
       itchChannel: webgl
       itchDirPath: $NAME_$VERSION_$PLATFORM
+      useGithubActions: 0
+      useUnityActions: 0
+      needGamejolthPush: 0
+      needSteamPush: 0
+      needGoogleDricePush: 0
+  - editorName: Test
+    itchGameLink: teamon/game-link
+    builds:
+    - outputRoot: Builds/
+      middlePath: $NAME_$VERSION_$PLATFORM/$NAME_$VERSION/$NAME$EXECUTABLE
+      targetGroup: 1
+      target: 19
+      options: 8
+      needZip: 1
+      compressDirPath: $NAME_$VERSION_$PLATFORM
+      needItchPush: 0
+      itchChannel: 
+      itchDirPath: 
       useGithubActions: 0
       useUnityActions: 0
       needGamejolthPush: 0
